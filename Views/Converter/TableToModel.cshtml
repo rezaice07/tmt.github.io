@@ -1,0 +1,171 @@
+﻿@model TMTConverter.Web.Models.CoverterModel
+@{
+    string title = "SQL Table To C# Entity Model Converter";
+    ViewBag.Title = title;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.OgTitle = "Read4Learn-" + title;
+    ViewBag.OgUrl = "http://www.read4learn.com/read4learn/Converter/TableToModel";
+    ViewBag.OgDescription = "Convert SQL table into C# model and boost your productivity.You never need to write your c# model for your sql table ever!";
+}
+
+<style type="text/css">
+    .input-width {
+        width: 100%;
+        height: 200px;
+    }
+</style>
+<input type="hidden" id="rootUrl" value="@string.Format("{0}://{1}{2}", Request.Url.Scheme, Request.Url.Authority, Url.Content("~"))" />
+
+<script type="text/javascript">
+    /**
+    *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+    *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables*/
+    /*
+    var disqus_config = function () {
+    this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL variable
+    this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+    };
+    */
+    (function () { // DON'T EDIT BELOW THIS LINE
+        var d = document, s = d.createElement('script');
+        s.src = 'https://http-tmt-rejawebs-com.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+@using (Html.BeginForm("TableToModel", "Converter", FormMethod.Post, new { @class = "form-horizontal" }))
+{
+    @Html.ValidationSummary(true)
+
+<fieldset>
+    <legend>Table to entity model  converter</legend>
+
+    <div class="control-group">
+        <label class="control-label">Choose Options</label>
+        <div class="controls">
+
+            <label class="checkbox pull-left pl23">
+                @Html.EditorFor(model => model.DisplayAttribute)
+                DisplayAttribute
+            </label>
+            <label class="checkbox pull-left pl23">
+                @Html.EditorFor(model => model.RequiredAttribute)
+                RequiredAttribute
+            </label>
+            <label class="checkbox pull-left pl23">
+                @Html.EditorFor(model => model.StringLengthAttribute)
+                StringLengthAttribute
+            </label>
+            <label class="checkbox pull-left pl23">
+                @Html.EditorFor(model => model.WithNewLine)
+                WithNewLine
+            </label>
+        </div>
+    </div>
+    <div class="control-group" style="margin-top:25px">
+        <label class="control-label tmt-control-lebel">Table Coloumn(s)</label>
+        <div class="controls">
+            @Html.TextAreaFor(model => model.Input, new { @class = "input-width tmt-textare" })
+            @Html.ValidationMessageFor(model => model.Input)
+        </div>
+    </div>
+    <div class="control-group">
+
+        <div class="controls">
+            <p class="text-center">
+                <input type="submit" class="btn btn-success" value="Generate" />
+            </p>
+        </div>
+    </div>
+
+
+    <div class="control-group">
+        <label class="control-label">@Html.LabelFor(model => model.Output)</label>
+        <div class="controls">
+            <pre>@Html.Raw(Model.Output) </pre>
+        </div>
+    </div>
+    
+    <iframe width="775"
+            height="413"
+            src="https://www.youtube.com/embed/1BPmRMC0zcw"
+            frameborder="0"
+            allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+            allowfullscreen>
+    </iframe>
+
+    <div class="control-group">
+        <strong>Example: </strong>
+    </div>
+
+    <div class="control-group">
+        Step 1: Copy table coloumns form the design view of a table using SQL Server Management Studio
+    </div>
+    <div class="control-group">
+        <img src="/assets/imges/TableColoumns.png" width="58%" height="500px">
+    </div>
+
+    <div class="control-group">
+        Step 2: Paste the copied coloumn(s) in the filed Table Coloumn(s) like the sample below, then "click" on Generate Button.
+    </div>
+    <div class="control-group">
+        <pre>
+                SourceId	int	Unchecked
+                SourceName	nvarchar(200)	Unchecked
+                ActiveStatus	bit	Unchecked
+                RecordStatus	bit	Unchecked
+                CreatedBy	int	Unchecked
+                CreatedDate	datetime	Unchecked
+                UpdatedBy	int	Checked
+                UpdatedDate	datetime	Checked
+            </pre>
+
+    </div>
+    <div class="control-group">
+        Step 3: Finally your enitity model will be generated like below.
+    </div>
+    <div class="control-group">
+
+        <pre>
+            [Display(Name = "Source Id")]
+            [Required(ErrorMessage = "{0} is Required")]
+            public int SourceId { get; set; }
+
+            [Display(Name = "                Source Name")]
+            [Required(ErrorMessage = "{0} is Required")]
+            [StringLength(200, ErrorMessage = "Maximum length is {1}")]
+            public string                 SourceName { get; set; }
+
+            [Display(Name = "                Active Status")]
+            [Required(ErrorMessage = "{0} is Required")]
+            public bool                 ActiveStatus { get; set; }
+
+            [Display(Name = "                Record Status")]
+            [Required(ErrorMessage = "{0} is Required")]
+            public bool                 RecordStatus { get; set; }
+
+            [Display(Name = "                Created By")]
+            [Required(ErrorMessage = "{0} is Required")]
+            public int                 CreatedBy { get; set; }
+
+            [Display(Name = "                Created Date")]
+            [Required(ErrorMessage = "{0} is Required")]
+            public DateTime                 CreatedDate { get; set; }
+
+            [Display(Name = "                Updated By")]
+            public int?                 UpdatedBy { get; set; }
+
+            [Display(Name = "                Updated Date")]
+            public DateTime?                 UpdatedDate { get; set; }
+            </pre>
+
+    </div>
+
+    <div id="disqus_thread"></div>
+    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+    <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+</fieldset>
+}

@@ -1,0 +1,181 @@
+﻿@model TMTConverter.Web.Models.CoverterModel
+@{
+    string title = "Entity Model (Class Properties) to SQL Table Converter";
+    ViewBag.Title = title;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.OgTitle = "Read4Learn-" + title;
+    ViewBag.OgUrl = "http://www.read4learn.com/read4learn/Converter/TableToModel";
+    ViewBag.OgDescription = "Convert Entity Model (Class Properties) to SQL Table and boost your productivity.You never need to write your c# model for your sql table ever!";
+}
+
+<style type="text/css">
+    .input-width {
+        width: 100%;
+        height: 200px;
+    }
+</style>
+<input type="hidden" id="rootUrl" value="@string.Format("{0}://{1}{2}", Request.Url.Scheme, Request.Url.Authority, Url.Content("~"))" />
+
+<script type="text/javascript">
+    /**
+    *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+    *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables*/
+    /*
+    var disqus_config = function () {
+    this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL variable
+    this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+    };
+    */
+    (function () { // DON'T EDIT BELOW THIS LINE
+        var d = document, s = d.createElement('script');
+        s.src = 'https://http-tmt-rejawebs-com.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+@using (Html.BeginForm("ModelToTable", "Converter", FormMethod.Post, new { @class = "form-horizontal" }))
+{
+    @Html.ValidationSummary(true)
+
+    <fieldset>
+        <legend>Entity Model (Class Properties) to SQL Table Converter</legend>
+
+
+        <div class="control-group">
+            <label class="control-label">Class Model Properties</label>
+            <div class="controls">
+                @Html.TextAreaFor(model => model.Input, new { @class = "input-width tmt-textare" })
+                @Html.ValidationMessageFor(model => model.Input)
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label">Choose type for string</label>
+            <div class="controls pl23">
+                <label class="radio inline">
+                    @Html.RadioButtonFor(model => model.DisplayAttribute, false, new { @class = "rdoSIngle" })
+                    varchar
+                </label>
+                <label class="radio inline">
+                    @Html.RadioButtonFor(model => model.DisplayAttribute, true, new { @class = "rdoMultiple" })
+                    nvarchar
+                </label>
+            </div>
+        </div>
+
+        <div class="control-group">
+            <div class="controls">
+                <p class="text-center">
+                    <input type="submit" class="btn btn-success" value="Generate" />
+                </p>
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label">SQL Table Script</label>
+            <div class="controls">
+                <pre>@Html.Raw(Model.Output) </pre>
+            </div>
+        </div>
+
+        <div class="control-group">
+            <strong>Example: </strong>
+        </div>
+
+        <div class="control-group">
+            Step 1.a: Copy model class or only properties form .cs file like below.
+        </div>
+        <div class="control-group">
+            <pre>
+using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Exam.Data.Settings
+{
+    public class Source
+    {       
+        [Key]
+        public int SourceId {get; set;}
+        [Required(ErrorMessage = "Source is Required")]
+        [StringLength(450, ErrorMessage = "Maximum length is {1}")]
+        [Display(Name = "Source Name")]
+
+        public string SourceName { get; set; }
+        [Display(Name = "Active Status")]
+        public bool ActiveStatus {get; set;}
+        public bool RecordStatus {get; set;}
+
+        [Display(Name = "Created By")]
+        public int CreatedBy { get; set; }
+        [Display(Name = "Created Date")]
+        public DateTime CreatedDate { get; set; }
+        [Display(Name = "Updated By")]
+        public int? UpdatedBy { get; set; }
+        [Display(Name = "Updated Date")]
+        public DateTime? UpdatedDate { get; set; }
+    }
+}
+                 </pre>
+        </div>
+
+        <div class="control-group">
+            Step 1.b: Or you can only copy properties with class like below or full text like above.
+        </div>
+        <div class="control-group">
+            <pre>
+    public class Source
+    {       
+        [Key]
+        public int SourceId {get; set;}
+        [Required(ErrorMessage = "Source is Required")]
+        [StringLength(450, ErrorMessage = "Maximum length is {1}")]
+        [Display(Name = "Source Name")]
+        public string SourceName { get; set; }
+
+        [Display(Name = "Active Status")]
+        public bool ActiveStatus {get; set;}
+        public bool RecordStatus {get; set;}
+
+        [Display(Name = "Created By")]
+        public int CreatedBy { get; set; }
+        [Display(Name = "Created Date")]
+        public DateTime CreatedDate { get; set; }
+        [Display(Name = "Updated By")]
+        public int? UpdatedBy { get; set; }
+        [Display(Name = "Updated Date")]
+        public DateTime? UpdatedDate { get; set; }
+    }
+            </pre>
+
+        </div>
+        <div class="control-group">
+            Step 3: Click the "Generate" Button, Then your table script will be generated like below.
+        </div>
+        <div class="control-group">
+
+            <pre>
+CREATE TABLE Source
+( 
+   SourceId int not null IDENTITY(1,1) PRIMARY KEY,
+   SourceName nvarchar(450) not null,
+   ActiveStatus bit not null,
+   RecordStatus bit not null,
+   CreatedBy int not null,
+   CreatedDate datetime not null,
+   UpdatedBy int,
+   UpdatedDate datetime,
+)
+            </pre>
+
+        </div>
+
+        <div id="disqus_thread"></div>
+        <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+        <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+    </fieldset>
+}
